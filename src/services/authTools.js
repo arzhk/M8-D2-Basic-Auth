@@ -12,8 +12,8 @@ const basicAuth = async (req, res, next) => {
   if (!req.headers.authorization) {
     next(await errorFormat("Auth missing.", 401));
   } else {
-    const [email, password] = atob(req.headers.authorization.split(" ")[1]).split(":");
-    const user = await userSchema.findByCredentials(email, password);
+    const [username, password] = atob(req.headers.authorization.split(" ")[1]).split(":");
+    const user = await userSchema.findByCredentials(username, password);
     if (!user) {
       next(await errorFormat("Invalid email/password.", 401));
     } else {
@@ -27,8 +27,8 @@ const adminAuth = async (req, res, next) => {
   if (!req.headers.authorization) {
     next(await errorFormat("Auth missing.", 401));
   } else {
-    const [email, password] = atob(req.headers.authorization.split(" ")[1]).split(":");
-    const user = await userSchema.findByCredentials(email, password);
+    const [username, password] = atob(req.headers.authorization.split(" ")[1]).split(":");
+    const user = await userSchema.findByCredentials(username, password);
     if (!user) {
       next(await errorFormat("Invalid email/password.", 401));
     } else {

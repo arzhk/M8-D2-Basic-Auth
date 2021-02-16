@@ -1,5 +1,4 @@
 const express = require("express");
-const mongoose = require("mongoose");
 const userSchema = require("./schema");
 const { basicAuth, adminAuth } = require("../authTools");
 
@@ -19,6 +18,26 @@ userRouter.post("/", async (req, res, next) => {
     const newUser = new userSchema(req.body);
     await newUser.save();
     res.status(201).send("Successfully registered.");
+  } catch (err) {
+    next(err);
+  }
+});
+
+userRouter.put("/me", basicAuth, async (req, res, next) => {
+  const updates = Object.keys(req.body);
+  updates.forEach((update) => (req.user[update] = req.body[update]));
+  await req.user.save();
+  res.send("Successfully updated information");
+  try {
+  } catch (err) {
+    next(err);
+  }
+});
+
+userRouter.delete("/me", basicAuth, async (req, res, next) => {
+  try {
+    await userSchema.findByIdAndDelete(req.user);
+    res.send("Successfully deleted user");
   } catch (err) {
     next(err);
   }
